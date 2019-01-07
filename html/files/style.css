@@ -1,0 +1,306 @@
+body{
+	background:#28282E;
+}
+.mdl-layout__header{
+	background:#1B1B21;
+}
+.mdl-layout__drawer{
+	background:#1B1B21;
+	border:0px;
+}
+.big-card{
+width:auto;
+background:transparent;
+
+
+}
+.script-list-card{
+margin-top:50px;
+background:#37373D;
+border-radius:5px;
+}
+.script-list-card .mdl-card__media{
+	border-bottom: .5px solid #28282E;
+
+}
+.mdl-card__title{
+	color:white;
+}
+.mdl-card__actions{
+	padding:10px;
+	height: 59px;
+}
+.mdl-card__media{
+	background:transparent;
+}
+
+
+
+.mdl-data-table{
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	width:100%;
+	background:#37373D;
+	color:white;
+	border:none;
+	box-shadow: none;
+}
+.progress-bar-container{
+	position: absolute;
+	top:20px;
+	right:70px;
+	width:150px;
+}
+
+.mdl-data-table thead tr th{
+	color:white;
+	background:transparent
+}
+.mdl-data-table tr{
+	color:white;
+}
+.mdl-data-table tr a{
+	color:#7382A8;
+	font-weight: bold;
+}
+
+.run-script-button{
+	background:transparent;
+	color:#7382A8;
+	border:none;
+	box-shadow: none;
+	float:right;
+}
+.error-div{
+	position: absolute;
+	height:40px;
+	right:200px;
+	left:200px;
+	top:20px;
+	background:#F66359;
+	border-radius: 5px;
+}
+.closebtn{
+	margin-top:10px;
+	margin-right: 15px;
+	color: white;
+	font-weight: bold;
+	float: right;
+	font-size: 22px;
+	line-height: 20px;
+	cursor: pointer;
+
+}
+#error-text{
+	position: relative;
+	font-size:20px;
+	top:9px;
+	left:20px;
+	color:white;
+}
+.storage-usage-progress-ring{
+	position: absolute;
+
+
+}
+.format-button{
+	position: relative;
+	float:right;
+	margin-right:60px;
+	background:#F66359 !important;
+}
+.byte-usage{
+	position: relative;
+	top:3px;
+	right:5px;
+	float:right !important;
+}
+.storage-usage-progress-ring-container{
+	position: relative;
+	right:40px;
+	float:right;
+	margin-right:5px;
+}
+
+.card-wrapper p{
+	float:left;
+	margin-top:5px;
+	margin-left:5px;
+}
+
+.file-upload {
+	position: absolute;
+	right:10px;
+	float:right;
+  }
+.hidden{
+	display: none;
+}
+.shown{
+	display: block;
+}
+.button-1{
+	background:transparent;
+	color:#7382A8;
+	border:none;
+	box-shadow: none;
+	float:right;
+}
+  
+  .file-upload__input {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	font-size: 1;
+	width: 0;
+	height: 100%;
+	opacity: 0;
+  }
+
+
+.editor-textarea-container{
+	position: absolute;
+	right:80px;
+	left:80px;
+	bottom:100px;
+	top:100px;
+}
+.editor-textarea{
+	width:100%;
+	height: 100%;
+	border-radius: 5px;
+}
+.script-name{
+	color:#7382A8;
+	font-size: 50px;
+	margin-top:40px;
+}
+.bottom-toolbar{
+	position: absolute;
+	right:80px;
+	left:80px;
+	height:40px;
+	bottom:40px;
+
+}
+.toolbar-button{
+	float:right;
+	margin-left:10px;
+	background: #7382A8;
+}
+@media (min-width: 1040px) {
+	.content-container{
+		position: absolute;
+		top:0px;
+		width:960px;
+		right:-480px;
+		margin-right:50%;
+	}
+	.card-wrapper{
+		position: absolute;
+		right:10px;
+		left:10px;
+		top:80px;
+		color:white;
+	}
+
+}
+@media (min-width:585px) and (max-width: 1040px) {
+		.content-container{
+			position: absolute;
+			right:100px !important;
+			left:100px !important;
+			width:auto !important;
+		}
+		.card-wrapper{
+			position: absolute;
+			right:10px;
+			left:10px;
+			top:80px;
+			color:white;
+		}
+  }
+
+@media (min-width: 401px) and (max-width: 585px) {
+
+		.mdl-data-table{
+			width:366px !important;
+		}
+		.content-container{
+			position: absolute;
+			right:100px !important;
+			left:100px !important;
+			width:auto !important;
+		}
+		.card-wrapper{
+			position: absolute;
+			width: 366px !important;
+			margin-right:50% !important;
+			right:-183px !important;
+			top:80px;
+			color:white;
+		}
+		.toolbar-button{
+			float: none !important;
+		}
+		.bottom-toolbar-button-containers{
+			width:366px;
+		}
+}
+@media (max-width: 400px) {
+	.card-wrapper{
+		position: absolute;
+		top:80px;
+		color:white;
+		width:100%;
+	}
+	.card-wrapper-title{
+		margin-left:10px !important;
+	}
+	.upload-script-button{
+		width:40px;
+	}
+	.mdl-data-table{
+		left:0px !important;
+		right:0px !important;
+	}
+	.content-container{
+		position: absolute;
+		top:0px !important;
+		width:100%;
+		height:100%;
+	}
+	form input{
+		width:50px;
+	}
+	.upload-script-button{
+		right:25px;
+		width:80px;
+	}
+	.error-div{
+		position: absolute;
+		top:20px;
+		right:10px;
+		left:10px;
+	}
+	#error-text{
+		font-size:12px;
+	}
+	.editor-textarea-container{
+		right:10px;
+		left:10px;
+	}
+	.bottom-toolbar{
+		right:5px;
+		left:5px;
+	}
+	.toolbar-button{
+		float: none !important;
+		width:50px !important;
+		font-size: 60%;
+	}
+
+}
+

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en">
+<title>Wi-Fi Ducky</title>
+<meta name="description" content="Wi-Fi enabled USB HID">
+<meta name="author" content="Nightcrawler">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="mdl.js"></script>
+<script src="jquery.js"></script>
+<script src="functions.js"></script>
+<link rel="stylesheet" href="mdl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title" id="title">Wi-Fi Ducky</span>
+      <div class="header-img"></div>
+
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+ 
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Wi-Fi Ducky</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="index.html">Scripts</a>
+      <a class="mdl-navigation__link" href="live.html">Live Execute</a>
+      <a class="mdl-navigation__link" href="settings.html">Settings</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+		<div class="page-content" id="page-content">
+    <center><p id="script-name" class="script-name"></p></center>
+    <div class="editor-textarea-container">
+        <textarea id="editor-textarea" class="editor-textarea"></textarea>
+		</div>
+		<div class="bottom-toolbar">
+			<div class="bottom-toolbar-button-containers">
+				<center>
+						<button id="save-button" type="button"  onclick="save()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect toolbar-button">Save</button>
+						<button id="save-button" type="button" onclick="del()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect toolbar-button">Delete</button>
+						<button id="save-button" type="button"  onclick="rename()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect toolbar-button">Rename</button>
+						<button id="save-button" type="button" " onclick="run()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect toolbar-button">Run</button>
+				</center>
+			</div>
+		</div>
+	</main>
+	</div>
+</div>
+</body>
+</html>
+<script>
+$(document).ready(function(){
+
+});
+
+
+			/* source: http://stackoverflow.com/questions/827368/using-the-get-parameter-of-a-url-in-javascript */
+			function get(variable) {
+			  var query = window.location.search.substring(1);
+			  var vars = query.split("&");
+			  for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+				  return pair[1];
+				}
+			  } 
+			  console.log('Query Variable ' + variable + ' not found');
+			}
+			
+			var scriptName = decodeURI(get("script"));
+			var canEdit = false;
+			
+			function getScript(){
+				document.getElementById("script-name").innerHTML = scriptName;
+				getResponse("script?name="+scriptName,function(responseText){
+					document.getElementById("editor-textarea").value = responseText;
+					count();
+					if(responseText.length > 1024){
+						document.getElementById("saveInfo").innerHTML = "Script too large to edit.";
+						document.getElementById("editor-textarea").readOnly = true;
+					}
+					else{
+						document.getElementById("saveInfo").innerHTML = '<button onclick="save()" class="button-primary">save</button>';
+						canEdit = true;
+					}
+				});
+			}
+			
+			getScript();
+			
+			function count(){
+				var length = document.getElementById("editor-textarea").value.length;
+				document.getElementById("charCount").innerHTML = length;
+				if(length >= 1024) document.getElementById("saveInfo").innerHTML = "Script too large to edit.";
+				else document.getElementById("saveInfo").innerHTML = '<button onclick="save()" class="button-primary">save</button>';
+			}
+			
+			function del(){
+				getResponse("delete?name="+scriptName,function(responseText){
+					if(responseText == "true") window.location = "index.html";
+				});
+			}
+			
+			function rename(){
+				var newName = prompt("New Script-Name:",scriptName);
+				if(newName !== null){
+					getResponse("rename?name="+scriptName+"&newName="+newName,function(responseText){
+						if(responseText == "true") window.location = "view.html?script="+newName;
+					});
+				}
+			}
+			
+			function run(){
+				var url = "run?name="+scriptName;
+				if(canEdit === true){
+					var script = document.getElementById("editor-textarea").value.replace(/\n\r?/g, '%0D');
+					url = "run?script="+script;
+				}
+				getResponse(url,function(responseText){
+					if(responseText == "true") showMessage("Executing "+scriptName+"...",2500);
+				},undefined,undefined, "POST");
+			}
+			
+			function save(){
+				var script = document.getElementById("editor-textarea").value.replace(/\n\r?/g, '%0D');
+				getResponse("save?name="+scriptName+"&script="+script,function(responseText){
+					if(responseText == "true") showMessage("Script Saved! ",2500);
+				},undefined,undefined, "POST");
+			}
+
+</script>
+

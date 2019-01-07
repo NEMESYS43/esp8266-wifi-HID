@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en">
+<title>Wi-Fi Ducky</title>
+<meta name="description" content="Wi-Fi enabled USB HID">
+<meta name="author" content="Nightcrawler">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="mdl.js"></script>
+<script src="jquery.js"></script>
+<script src="functions.js"></script>
+<link rel="stylesheet" href="mdl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title" id="title">Wi-Fi Ducky</span>
+      <div class="header-img"></div>
+
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+ 
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Wi-Fi Ducky</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="index.html">Scripts</a>
+      <a class="mdl-navigation__link" href="live.html">Live Execute</a>
+      <a class="mdl-navigation__link" href="settings.html">Settings</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content" id="page-content">
+          <div class="content-container">
+              <div class="card-wrapper">
+                <p class="card-wrapper-title">Scripts</p><div id="script-usage-container"><p class="byte-usage" id="byte-usage"></p></div><div class="storage-usage-progress-ring-container" id="storage-usage-progress-ring-container"><progress-ring class="storage-usage-progress-ring" stroke="4" radius="20" progress="100" color="#37373D" background-color="transparent"></progress-ring></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect format-button" onclick="format()">Format</button>
+                  <div class="card big-card script-list-card" id="script-list-card">
+                      <div class="mdl-card__media" id="script-list-card-media">
+    
+                      </div>
+                      <div class="mdl-card__actions"> 
+                            <form action="/upload" method="POST" id="upload-form" enctype="multipart/form-data">
+
+                            <div class="file-upload">
+                                <label id="upload-button" for="upload" class="file-upload__label mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button-1">Upload</label>
+                                <input id="upload" class="file-upload__input" type="file" name="update">
+                                <input id="save-button" type="submit" value="Save" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-script-button button-1 hidden">
+                            </div>
+                            </form>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+
+    </div>
+  </main>
+</div>
+</body>
+</html>
+<script>
+$(document).ready(function(){
+  /*load script list*/
+  loadlist();
+
+  /*create listener to see when the user has selected a file and and handle the button changes*/
+	$(function() {
+		$("input:file").change(function (){
+		  var fileName = $(this).val();
+		  console.log(fileName);
+		hideElement('#upload-button');
+		showElement('#save-button');
+		});
+   });
+     
+});
+
+
+var res;
+var percentage;
+var storageUsageContainer;
+var table = document.getElementById("scriptlist");
+var tableRowHTML = '';
+var tableHTML = '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp table-responsive"><thead><tr><th class="mdl-data-table__cell--non-numeric">Name</th><th>Size</th><th>Run</th></tr></thead><tbody id="scriptlist"></tbody></table>';
+
+
+function loadlist(){
+  console.log('loadList');
+  getResponse("list.json",function(responseText){
+
+	res = JSON.parse(responseText);
+	percentage = (res.usedBytes / res.totalBytes) * 100;
+	storageUsageContainer = document.getElementById('storage-usage-progress-ring-container');
+
+
+		if(percentage <= 1){
+			/*if the number is lower than 1 instead of rounding down to 0 with Math.round we round up with Math.ceil*/
+			console.log(Math.ceil(percentage));
+			percentage = Math.ceil(percentage);
+		}else{
+			console.log("quick mafs "+ Math.round(percentage));
+			percentage = Math.round(percentage);
+		}
+
+	document.getElementById('byte-usage').innerHTML = bytesToSize(res.usedBytes) +' / ' + bytesToSize(res.totalBytes);
+	storageUsageContainer.innerHTML += '<progress-ring class="storage-usage-progress-ring" stroke="4" radius="20" progress="'+percentage+'" color="#7382A8" background-color="transparent"></progress-ring>';
+	
+	for(var i=0;i<res.list.length;i++){
+	  tableRowHTML += "<tr>";
+	  tableRowHTML += "<td class='mdl-data-table__cell--non-numeric'><a href='view.html?script="+res.list[i].n+"'>"+res.list[i].n+"</a></td>";
+	  tableRowHTML += "<td>"+res.list[i].s+"</td>";
+	  tableRowHTML += '<td><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect run-script-button" onclick="run('+i+')">run</button></td>';
+	  tableRowHTML += "</tr>";
+	}
+	document.getElementById("script-list-card-media").innerHTML += tableHTML;
+	document.getElementById("scriptlist").innerHTML = tableRowHTML;
+  });
+}
+
+
+function run(i){
+  getResponse("run?name="+res.list[i].n,function(responseText){
+	console.log(responseText);
+  },undefined,undefined,"POST");
+}
+
+function format(){
+  getResponse("format",function(responseText){
+	loadlist();
+  });
+}
+
+</script>
+
